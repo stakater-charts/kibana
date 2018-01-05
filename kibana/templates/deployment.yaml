@@ -45,11 +45,11 @@ items:
         containers:
         - env:
           - name: KUBERNETES_MASTER
-            value: https://kubernetes.default
+            value: {{ .Values.kubernetes.host }}
           - name: ELASTICSEARCH_HOST
-            value: elasticsearch
+            value: {{ .Values.elasticSearch.host }}
           - name: ELASTICSEARCH_PORT
-            value: '9200'
+            value: {{.Values .elasticSearch.post | quote }}
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
