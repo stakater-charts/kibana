@@ -49,7 +49,7 @@ items:
           - name: ELASTICSEARCH_HOST
             value: {{ .Values.elasticSearch.host }}
           - name: ELASTICSEARCH_PORT
-            value: {{.Values .elasticSearch.port | quote }}
+            value: {{ .Values.elasticSearch.port | quote }}
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
