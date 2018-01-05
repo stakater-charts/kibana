@@ -1,0 +1,13 @@
+kubernetes:
+  host: https://kubernetes.default
+  namespace: default
+
+elasticSearch:
+  host: elasticsearch
+  port: 9200
+
+kibana:
+  image:
+    name: stakater/kibana
+    tag: 6.1.0
+    pullPolicy: IfNotPresent
