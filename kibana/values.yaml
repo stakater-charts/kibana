@@ -1,1 +1,6 @@
 namespace: default
+kibana:
+  image:
+    name: stakater/kibana
+    tag: 6.1.0
+    pullPolicy: IfNotPresent
