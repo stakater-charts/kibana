@@ -10,6 +10,10 @@ clientsNode(clientsImage: 'stakater/kops-ansible:helm-bundle') {
         stage('Checkout') {
             checkout scm
         }
+        
+        stage('Init Helm') {
+            sh "helm init --client-only"
+        }
 
         stage('Prepare Chart') {
             chartPackageName = prepareChart(chartName)
@@ -24,17 +28,17 @@ clientsNode(clientsImage: 'stakater/kops-ansible:helm-bundle') {
 def prepareChart(String chartName) {
     result = shOutput """
                 cd ${WORKSPACE}/${chartName}
-                helm lint > /dev/null
+                helm lint
                 helm package .
             """
 
-    return result.substring(result.lastIndexOf('/'), result.length)
+    return result.substring(result.lastIndexOf('/') + 1, result.length())
 }
 
 def uploadChart(String chartName, String fileName) {
     sh """
         cd ${WORKSPACE}/${chartName}
-        curl -L --data-binary "@${fileName}" http://chartmuseum/api/charts
+        curl -L --data-binary \"@${fileName}\" http://chartmuseum/api/charts
     """
 }
 
