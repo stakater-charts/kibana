@@ -6,7 +6,6 @@ String chartName = "kibana"
 
 clientsNode(clientsImage: 'stakater/kops-ansible:helm-bundle') {
     container(name: 'clients') {
-
         stage('Checkout') {
             checkout scm
         }
