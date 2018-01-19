@@ -6,13 +6,9 @@ items:
   kind: Service
   metadata:
     annotations:
-      fabric8.io/app-menu: management
-      fabric8.io/git-commit: 2b9f7ce19493fe6d18392ac4f4be16f5e1a76fa3
-      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
-      fabric8.io/git-branch: release-v2.2.311
       fabric8.io/ingress.annotations: |-
         ingress.kubernetes.io/force-ssl-redirect: false
-        kubernetes.io/ingress.class: internal-ingress
+        kubernetes.io/ingress.class: {{ .Values.kibana.service.ingressClass }}
     labels:
       provider: fabric8
       expose: "true"
