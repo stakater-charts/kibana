@@ -1,13 +1,15 @@
 kubernetes:
   host: https://kubernetes.default
-  namespace: default
 
 elasticSearch:
   host: elasticsearch
   port: 9200
 
 kibana:
+  namespace: default
   image:
     name: stakater/kibana
     tag: 6.1.0
     pullPolicy: IfNotPresent
+  service:
+    ingressClass: internal-ingress
