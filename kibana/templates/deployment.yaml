@@ -6,63 +6,86 @@ items:
   kind: Deployment
   metadata:
     labels:
-      provider: fabric8
-      app: {{ template "fullname" . }}
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
-      version: 2.2.311
-      group: io.fabric8.devops.apps
+{{ include "labels.stakater" . | indent 6 }}
+{{ include "labels.chart" . | indent 6 }}
+    annotations:
+      configmap.fabric8.io/update-on-change: "keycloak-proxy"
     name: kibana
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: {{ template "fullname" . }}
-        provider: fabric8
-        group: io.fabric8.devops.apps
+{{ include "labels.selector" . | indent 8 }}
     template:
       metadata:
         labels:
-          provider: fabric8
-          app: {{ template "fullname" . }}
-          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-          release: {{ .Release.Name | quote }}
-          heritage: {{ .Release.Service | quote }}
-          version: 2.2.311
-          group: io.fabric8.devops.apps
+{{ include "labels.selector" . | indent 10 }}
       spec:
         containers:
         - env:
+          - name: ELASTICSEARCH_URL
+            value: {{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}
           - name: KUBERNETES_MASTER
             value: {{ .Values.kubernetes.host }}
-          - name: ELASTICSEARCH_HOST
-            value: {{ .Values.elasticSearch.host }}
-          - name: ELASTICSEARCH_PORT
-            value: {{ .Values.elasticSearch.port | quote }}
+          - name: SERVER_BASEPATH
+            value: {{ .Values.kibana.config.serverBasePath }}
+          # For EK 6+ setup
+          # - name: ELASTICSEARCH_HOST
+          #   value: elasticsearch.tools
+          # - name: ELASTICSEARCH_PORT
+          #   value: '9200'
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          # image: stakater/kibana:6.1.0
           image: "{{ .Values.kibana.image.name }}:{{ .Values.kibana.image.tag }}"
           imagePullPolicy: {{ .Values.kibana.image.pullPolicy }}
           livenessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.kibana.probes.liveness.initialDelaySeconds }}
             tcpSocket:
               port: 5601
-          name: kibana
+          name: {{ template "name" . }}
           readinessProbe:
             httpGet:
               path: /
               port: 5601
-            initialDelaySeconds: 5
+            initialDelaySeconds: {{ .Values.kibana.probes.readiness.initialDelaySeconds }}
           securityContext:
             privileged: false
+        - env:
+          - name: ELASTICSEARCH_URL
+            value: {{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}
+          - name: KUBERNETES_MASTER
+            value: {{ .Values.kubernetes.host }}
+          image: "{{ .Values.kibana.configImage.name }}:{{ .Values.kibana.configImage.tag }}"
+          imagePullPolicy: {{ .Values.kibana.configImage.pullPolicy }}
+          name: logstash-template
+        - name: proxy
+          image: "{{ .Values.kibana.proxy.image.name }}:{{ .Values.kibana.proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.kibana.proxy.image.pullPolicy }}
+          args:
+          - --config={{ .Values.kibana.proxy.config.filePath }}
+          - --upstream-url={{ .Values.kibana.proxy.config.upstreamUrl }}
+          - --redirection-url={{ .Values.kibana.proxy.config.redirectionUrl }}
+          - --upstream-response-header-timeout={{ .Values.kibana.proxy.config.upstreamResponseHeaderTimeout }}
+          - --upstream-timeout={{ .Values.kibana.proxy.config.upstreamTimeout }}
+          - --upstream-keepalive-timeout={{ .Values.kibana.proxy.config.upstreamKeepAliveTimeout }}
+          - --server-read-timeout={{ .Values.kibana.proxy.config.serverReadTimeout }}
+          - --server-write-timeout={{ .Values.kibana.proxy.config.serverWriteTimeout }}
+          volumeMounts:
+          - name: keycloak-proxy-config
+            mountPath: /etc/config
+        volumes:
+          - name: keycloak-proxy-config
+            configMap:
+              name: keycloak-proxy
+# For EK 6+ setup
 # Container for submitting index-pattern, visualizations and dashboard to kibana
 # WIP
 #        - env:
 #          - name: ELASTICSEARCH_URL
-#            value: http://elasticsearch:9200
+#            value: http://elasticsearch.tools:9200
 #          - name: KUBERNETES_MASTER
 #            value: https://kubernetes.default
 #          image: stakater/kibana-k8s-objects:develop

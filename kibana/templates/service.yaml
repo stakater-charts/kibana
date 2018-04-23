@@ -6,26 +6,20 @@ items:
   kind: Service
   metadata:
     annotations:
+      fabric8.io/ingress.path: /{{ template "name" . }}
       fabric8.io/ingress.annotations: |-
+        ingress.kubernetes.io/rewrite-target: /
         ingress.kubernetes.io/force-ssl-redirect: false
         kubernetes.io/ingress.class: {{ .Values.kibana.service.ingressClass }}
     labels:
-      provider: fabric8
-      expose: "true"
-      app: {{ template "fullname" . }}
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
-      version: 2.2.311
-      group: io.fabric8.devops.apps
-    name: kibana
+{{ include "labels.stakater" . | indent 6 }}
+{{ include "labels.chart" . | indent 6 }}
+    name: {{ template "name" . }}
   spec:
     ports:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 5601
+      targetPort: 80
     selector:
-      app: {{ template "fullname" . }}
-      provider: fabric8
-      group: io.fabric8.devops.apps
+{{ include "labels.selector" . | indent 6 }}
