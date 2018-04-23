@@ -7,9 +7,38 @@ elasticSearch:
 
 kibana:
   namespace: default
+  labels:
+    group: com.stakater.platform
+    provider: stakater
+    version: 4.5
   image:
     name: stakater/kibana
-    tag: 6.1.0
+    tag: 4.5
+    pullPolicy: IfNotPresent
+  configImage:
+    name: stakater/kibana-config
+    tag: 2.2.311
     pullPolicy: IfNotPresent
   service:
     ingressClass: internal-ingress
+  probes:
+    liveness:
+      initialDelaySeconds: 60
+    readiness:
+      initialDelaySeconds: 60
+  config:
+    serverBasePath: /kibana
+  proxy:
+    image:
+      name: quay.io/gambol99/keycloak-proxy
+      tag: v2.1.1
+      pullPolicy: IfNotPresent
+    config:
+      filePath: /etc/config/config.yml
+      upstreamUrl: http://127.0.0.1:5601
+      redirectionUrl: /kibana
+      upstreamResponseHeaderTimeout: 30s
+      upstreamTimeout: 30s
+      upstreamKeepAliveTimeout: 30s
+      serverReadTimeout: 30s
+      serverWriteTimeout: 30s
