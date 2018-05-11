@@ -10,7 +10,7 @@ items:
 {{ include "labels.chart" . | indent 6 }}
     annotations:
       configmap.fabric8.io/update-on-change: "keycloak-proxy"
-    name: kibana
+    name: {{ template "name" . }}
   spec:
     replicas: 1
     selector:
@@ -24,11 +24,11 @@ items:
         containers:
         - env:
           - name: ELASTICSEARCH_URL
-            value: {{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}
+            value: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
           - name: KUBERNETES_MASTER
-            value: {{ .Values.kubernetes.host }}
+            value: "{{ .Values.kubernetes.host }}"
           - name: SERVER_BASEPATH
-            value: {{ .Values.kibana.config.serverBasePath }}
+            value: "{{ .Values.kibana.config.serverBasePath }}"
           # For EK 6+ setup
           # - name: ELASTICSEARCH_HOST
           #   value: elasticsearch.tools
@@ -55,9 +55,9 @@ items:
             privileged: false
         - env:
           - name: ELASTICSEARCH_URL
-            value: {{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}
+            value: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
           - name: KUBERNETES_MASTER
-            value: {{ .Values.kubernetes.host }}
+            value: "{{ .Values.kubernetes.host }}"
           image: "{{ .Values.kibana.configImage.name }}:{{ .Values.kibana.configImage.tag }}"
           imagePullPolicy: {{ .Values.kibana.configImage.pullPolicy }}
           name: logstash-template

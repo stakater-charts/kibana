@@ -23,7 +23,7 @@ provider: {{ .Values.kibana.labels.provider }}
 
 {{- define "labels.stakater" -}}
 {{ template "labels.selector" . }}
-version: {{ .Values.kibana.labels.version }}
+version: "{{ .Values.kibana.labels.version }}"
 {{- end -}}
 
 {{- define "labels.chart" -}}
