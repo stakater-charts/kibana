@@ -2,7 +2,7 @@ kubernetes:
   host: https://kubernetes.default
 
 elasticSearch:
-  host: elasticsearch
+  host: http://elasticsearch.tools
   port: 9200
 
 kibana:
