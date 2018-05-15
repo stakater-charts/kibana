@@ -21,6 +21,7 @@ kibana:
     pullPolicy: IfNotPresent
   service:
     ingressClass: internal-ingress
+    expose: "true"
   probes:
     liveness:
       initialDelaySeconds: 60
