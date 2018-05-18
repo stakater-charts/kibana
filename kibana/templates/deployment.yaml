@@ -23,12 +23,8 @@ items:
       spec:
         containers:
         - env:
-          - name: ELASTICSEARCH_URL
-            value: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
           - name: KUBERNETES_MASTER
             value: "{{ .Values.kubernetes.host }}"
-          - name: SERVER_BASEPATH
-            value: "{{ .Values.kibana.config.serverBasePath }}"
           # For EK 6+ setup
           # - name: ELASTICSEARCH_HOST
           #   value: elasticsearch.tools
@@ -53,6 +49,9 @@ items:
             initialDelaySeconds: {{ .Values.kibana.probes.readiness.initialDelaySeconds }}
           securityContext:
             privileged: false
+          volumeMounts:
+            - name: {{ template "name" . }}-config
+              mountPath: /opt/kibana/config
         - env:
           - name: ELASTICSEARCH_URL
             value: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
@@ -80,6 +79,9 @@ items:
           - name: keycloak-proxy-config
             configMap:
               name: keycloak-proxy
+          - name: {{ template "name" . }}-config
+            configMap:
+              name: {{ template "name" . }}
 # For EK 6+ setup
 # Container for submitting index-pattern, visualizations and dashboard to kibana
 # WIP
