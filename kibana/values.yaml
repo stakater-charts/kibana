@@ -29,6 +29,7 @@ kibana:
       initialDelaySeconds: 60
   config:
     serverBasePath: /kibana
+    defaultAppId: "discover/All-logs"
   proxy:
     image:
       name: quay.io/gambol99/keycloak-proxy

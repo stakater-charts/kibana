@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+{{ include "labels.stakater" . | indent 4 }}
+{{ include "labels.chart" . | indent 4 }}
+  name: {{ template "name" . }}
+data:
+  kibana.yml: |-
+    server.basePath: "{{ .Values.kibana.config.serverBasePath }}"
+    elasticsearch.url: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
+    kibana.defaultAppId: "{{ .Values.kibana.config.defaultAppId }}"
+    
