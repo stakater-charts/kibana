@@ -31,6 +31,7 @@ kibana:
     serverBasePath: /kibana
     defaultAppId: "discover/All-logs"
   proxy:
+    enabled: true
     image:
       name: quay.io/gambol99/keycloak-proxy
       tag: v2.1.1

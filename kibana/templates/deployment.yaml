@@ -60,6 +60,7 @@ items:
           image: "{{ .Values.kibana.configImage.name }}:{{ .Values.kibana.configImage.tag }}"
           imagePullPolicy: {{ .Values.kibana.configImage.pullPolicy }}
           name: logstash-template
+      {{- if .Values.kibana.proxy.enabled }}
         - name: proxy
           image: "{{ .Values.kibana.proxy.image.name }}:{{ .Values.kibana.proxy.image.tag }}"
           imagePullPolicy: {{ .Values.kibana.proxy.image.pullPolicy }}
@@ -75,10 +76,13 @@ items:
           volumeMounts:
           - name: keycloak-proxy-config
             mountPath: /etc/config
+      {{- end }}
         volumes:
+        {{- if .Values.kibana.proxy.enabled }}
           - name: keycloak-proxy-config
             configMap:
               name: keycloak-proxy
+        {{- end }}
           - name: {{ template "name" . }}-config
             configMap:
               name: {{ template "name" . }}
