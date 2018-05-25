@@ -29,7 +29,7 @@ kibana:
     readiness:
       initialDelaySeconds: 60
   config:
-    serverBasePath: /kibana
+    # serverBasePath: /kibana
     defaultAppId: "discover/All-logs"
   proxy:
     enabled: true
