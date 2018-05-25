@@ -9,7 +9,7 @@ items:
       fabric8.io/ingress.path: /{{ template "name" . }}
       fabric8.io/ingress.annotations: |-
         ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: false
+        ingress.kubernetes.io/force-ssl-redirect: {{ .Values.kibana.service.forceSslRedirect }}
         kubernetes.io/ingress.class: {{ .Values.kibana.service.ingressClass }}
     labels:
 {{ include "labels.stakater" . | indent 6 }}
