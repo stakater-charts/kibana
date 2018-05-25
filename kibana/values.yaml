@@ -22,7 +22,7 @@ kibana:
   service:
     ingressClass: internal-ingress
     expose: "true"
-    forceSslRedirect: true
+    forceSslRedirect: "true"
   probes:
     liveness:
       initialDelaySeconds: 60
