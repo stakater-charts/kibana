@@ -21,6 +21,10 @@ items:
     - name: http
       port: 80
       protocol: TCP
+    {{- if .Values.kibana.proxy.enabled }}
       targetPort: 80
+    {{- else }}
+      targetPort: 5601
+    {{- end }}
     selector:
 {{ include "labels.selector" . | indent 6 }}

@@ -7,7 +7,9 @@ metadata:
   name: {{ template "name" . }}
 data:
   kibana.yml: |-
+    {{- if .Values.kibana.config.serverBasePath }}
     server.basePath: "{{ .Values.kibana.config.serverBasePath }}"
+    {{- end }}
     elasticsearch.url: "{{ .Values.elasticSearch.host }}:{{ .Values.elasticSearch.port }}"
     kibana.defaultAppId: "{{ .Values.kibana.config.defaultAppId }}"
     
