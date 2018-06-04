@@ -17,7 +17,7 @@ kibana:
     pullPolicy: IfNotPresent
   configImage:
     name: stakater/kibana-config
-    tag: 2.2.311
+    tag: 4.5
     pullPolicy: IfNotPresent
   service:
     ingressPath:  "/"
