@@ -11,6 +11,9 @@ items:
         ingress.kubernetes.io/rewrite-target: /
         ingress.kubernetes.io/force-ssl-redirect: {{ .Values.kibana.service.forceSslRedirect }}
         kubernetes.io/ingress.class: {{ .Values.kibana.service.ingressClass }}
+      {{- with .Values.kibana.service.exposeToForecastle }}
+        forecastle.stakater.com/expose: {{ . }}
+      {{- end }}
     labels:
 {{ include "labels.stakater" . | indent 6 }}
 {{ include "labels.chart" . | indent 6 }}
