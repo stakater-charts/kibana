@@ -24,6 +24,7 @@ kibana:
     ingressClass: internal-ingress
     expose: "true"
     forceSslRedirect: "true"
+    # exposeToForecastle: "true"
   probes:
     liveness:
       initialDelaySeconds: 60
