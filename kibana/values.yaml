@@ -24,7 +24,6 @@ kibana:
     ingressClass: internal-ingress
     expose: "true"
     forceSslRedirect: "true"
-    # exposeToForecastle: "true"
   probes:
     liveness:
       initialDelaySeconds: 60
@@ -48,3 +47,6 @@ kibana:
       upstreamKeepAliveTimeout: 30s
       serverReadTimeout: 30s
       serverWriteTimeout: 30s
+  forecastle: {}
+    # icon: https://cdn-images-1.medium.com/max/521/0*D__TQ7qMdoq3Y7kP.png
+    # expose: "true"
