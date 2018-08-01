@@ -9,7 +9,7 @@ items:
 {{ include "labels.stakater" . | indent 6 }}
 {{ include "labels.chart" . | indent 6 }}
     annotations:
-      configmap.fabric8.io/update-on-change: "keycloak-proxy"
+      configmap.reloader.stakater.com/reload: "keycloak-proxy"
     name: {{ template "name" . }}
   spec:
     replicas: 1
