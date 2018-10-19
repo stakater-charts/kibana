@@ -5,18 +5,10 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+{{- if .Values.kibana.service.annotations }}
     annotations:
-      fabric8.io/ingress.path: {{ .Values.kibana.service.ingressPath }}
-      fabric8.io/ingress.annotations: |-
-        ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: {{ .Values.kibana.service.forceSslRedirect }}
-        kubernetes.io/ingress.class: {{ .Values.kibana.service.ingressClass }}
-      {{- with .Values.kibana.forecastle.expose }}
-        forecastle.stakater.com/expose: {{ . }}
-      {{- end }}
-      {{- with .Values.kibana.forecastle.icon }}
-        forecastle.stakater.com/icon: {{ . }}
-      {{- end }}
+{{ toYaml .Values.kibana.service.annotations | indent 6 }}
+{{- end }}
     labels:
 {{ include "labels.stakater" . | indent 6 }}
 {{ include "labels.chart" . | indent 6 }}
