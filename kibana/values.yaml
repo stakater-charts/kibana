@@ -20,6 +20,7 @@ kibana:
     tag: 4.5
     pullPolicy: IfNotPresent
   service:
+    expose: "true"
     annotations:
       config.xposer.stakater.com/IngressURLPath: "/"
       config.xposer.stakater.com/Domain: stackator.com
